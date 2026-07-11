@@ -1,0 +1,115 @@
+# LinkKin workspace configuration (linkkin-setup repository)
+# Sibling layout: clone this repo next to linkkin-backend, linkkin-web, etc.
+
+workspace:
+  name: linkkin-setup
+  run_dir: .linkkin-run
+  repos_parent: ..
+
+git:
+  org: vinaymdk
+
+repositories:
+  - label: Backend
+    path: ../linkkin-backend
+    order: 1
+    type: node
+    clone: true
+    test: true
+    build: false
+  - label: Web
+    path: ../linkkin-web
+    order: 2
+    type: node
+    clone: true
+    test: true
+    build: true
+  - label: Admin
+    path: ../linkkin-admin
+    order: 3
+    type: node
+    clone: true
+    test: false
+    build: true
+  - label: Support
+    path: ../linkkin-support
+    order: 4
+    type: node
+    clone: true
+    test: false
+    build: true
+  - label: Mobile
+    path: ../linkkin-mobile
+    order: 5
+    type: flutter
+    clone: true
+    test: false
+    build: false
+  - label: Radio
+    path: linkkin-radio
+    order: 6
+    type: infra
+    clone: false
+    test: false
+    build: false
+
+ports:
+  backend: 8000
+  web: 5173
+  admin: 5174
+  support: 5175
+  icecast: 8089
+  dashboard: 9000
+
+urls:
+  backend: http://127.0.0.1:8000
+  web: http://127.0.0.1:5173
+  admin: http://127.0.0.1:5174
+  support: http://127.0.0.1:5175
+  icecast: http://127.0.0.1:8089
+
+services:
+  - key: backend
+    label: Backend
+    repo: linkkin-backend
+    port: backend
+    pid_var: PID_BACKEND
+    log: backend.log
+    expected: running
+  - key: web
+    label: Web
+    repo: linkkin-web
+    port: web
+    pid_var: PID_WEB
+    log: web.log
+    expected: running
+  - key: admin
+    label: Admin
+    repo: linkkin-admin
+    port: admin
+    pid_var: PID_ADMIN
+    log: admin.log
+    expected: running
+  - key: support
+    label: Support
+    repo: linkkin-support
+    port: support
+    pid_var: PID_SUPPORT
+    log: support.log
+    expected: running
+  - key: mobile
+    label: Mobile
+    expected: stopped
+  - key: redis
+    label: Redis
+    expected: running
+  - key: postgresql
+    label: PostgreSQL
+    expected: running
+  - key: radio
+    label: Radio
+    expected: optional
+
+preflight:
+  min_disk_free_percent: 10
+  min_memory_mb: 512

@@ -1,0 +1,44 @@
+# Workspace CI — reuses the same scripts as local development.
+# Copy or reference this workflow from each repo, or init git at workspace root.
+
+name: Workspace CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master, dev]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fix script permissions
+        run: chmod +x *.sh scripts/*.sh scripts/lib/*.sh linkkin-*/scripts/*.sh 2>/dev/null || true
+
+      - name: Doctor
+        run: ./linkkin-doctor.sh || true
+
+      - name: CI pipeline (test + build + preflight)
+        env:
+          CI: 'true'
+          USE_NPM_CI: '1'
+          SKIP_GIT_CLEAN: '1'
+        run: |
+          for dir in linkkin-backend linkkin-web linkkin-admin linkkin-support; do
+            if [ -f "$dir/package-lock.json" ]; then
+              cd "$dir" && npm ci && cd ..
+            fi
+          done
+          ./scripts/ci-pipeline.sh all

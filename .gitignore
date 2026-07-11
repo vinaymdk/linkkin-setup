@@ -1,0 +1,18 @@
+# Secrets and runtime artifacts
+.env
+.env.*
+!.env.example
+linkkin-radio/.env
+
+# Dev runtime
+.linkkin-run/
+incident-*/
+releases/
+report.md
+*.log
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
