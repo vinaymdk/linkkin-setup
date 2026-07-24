@@ -250,3 +250,19 @@ git clone git@github.com:vinaymdk/linkkin-setup.git
 cd linkkin-setup
 ./bootstrap.sh    # మిగతా repos auto-clone
 --------------------------------------------------
+
+<!-- Build APK for development with environment variables (API_BASE_URL and PUSH_HMAC_SECRET) - START -->
+flutter run --dart-define=API_BASE_URL=http://192.168.0.106:8000 --dart-define=PUSH_HMAC_SECRET=my_super_secret
+<!-- Build APK for development with environment variables (API_BASE_URL and PUSH_HMAC_SECRET) - END -->
+
+<!-- Build APK for production with environment variables (API_BASE_URL and PUSH_HMAC_SECRET) - START -->
+flutter build apk --release \
+--dart-define=API_BASE_URL=https://api.linkkin.com \
+--dart-define=PUSH_HMAC_SECRET=my_secret
+<!-- Build APK for production with environment variables (API_BASE_URL and PUSH_HMAC_SECRET) - END -->
+
+sudo -i -u postgres
+psql
+
+psql -h 127.0.0.1 -U postgres -d bhoomisetu_db
+psql -h 127.0.0.1 -U postgres -d linkkin_db
